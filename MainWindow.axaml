@@ -5,5 +5,35 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="HGDCabinetLauncher.MainWindow"
         Title="HGDCabinetLauncher">
-    Welcome to Avalonia!
+    
+    <Window.Background>
+        <ImageBrush Stretch="None" Opacity="100" Source="logoHGD.png"/>
+    </Window.Background>
+    <Window.Styles>
+        <Style Selector="TextBox">
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="IsReadOnly" Value="True" />
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+        <Style Selector="ListBoxItem">
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="CornerRadius" Value="15" />
+            <Setter Property="Margin" Value="5" />
+
+
+        </Style>
+    </Window.Styles>
+    
+    <StackPanel>
+        <TextBox Text="Husky Arcade Launcher!" Height="50"></TextBox>
+        <Grid RowDefinitions="400" ColumnDefinitions="*, 300" Height="">
+            <ListBox Grid.Column="1" SelectionMode="Single" Margin="5" CornerRadius="15" SelectedIndex="0">
+                <ListBoxItem>Doom</ListBoxItem>
+                <ListBoxItem>Duke Nukem 3D</ListBoxItem>
+                <ListBoxItem>Super Mario Kart</ListBoxItem>
+            </ListBox>
+        </Grid>
+    </StackPanel>
 </Window>
