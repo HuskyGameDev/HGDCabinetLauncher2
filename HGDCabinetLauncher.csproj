@@ -9,6 +9,7 @@
     </PropertyGroup>
     <ItemGroup>
         <None Remove=".gitignore" />
+        <None Remove="Games\**" />
     </ItemGroup>
     <ItemGroup>
         <!--This helps with theme dll-s trimming.
@@ -25,6 +26,7 @@
         <PackageReference Include="Avalonia.Skia" Version="11.0.0-preview4" />
         <PackageReference Include="Avalonia.Svg" Version="11.0.0-preview4" />
         <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-preview4" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
         <PackageReference Include="XamlNameReferenceGenerator" Version="1.5.1" />
     </ItemGroup>
     <ItemGroup>
@@ -32,5 +34,14 @@
       <AvaloniaResource Include="logoHGD.svg">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </AvaloniaResource>
+    </ItemGroup>
+    <ItemGroup>
+      <AvaloniaXaml Remove="Games\**" />
+    </ItemGroup>
+    <ItemGroup>
+      <Compile Remove="Games\**" />
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Remove="Games\**" />
     </ItemGroup>
 </Project>
