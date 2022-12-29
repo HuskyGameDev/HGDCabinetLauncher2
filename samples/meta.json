@@ -1,0 +1,10 @@
+{
+  "name": "cool game: definitive edition",
+  "exec": "coolGame.exe",
+  "desc": "This is a cool game, maybe the best! \n some text on a new line!",
+  "version": "2.0.1",
+  "link": "someWebsite.com",
+  "authors": "Joe Shmoe dirt farmer, Bob the destroyer",
+  "iconDir": "relativefilelocation/icon.svg",
+  "imgDir": "referencepic.png"
+}
