@@ -1,12 +1,10 @@
 using System;
-using System.Linq;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
-using System.Reflection;
-using System.Threading;
 using Avalonia.Input;
 
 namespace HGDCabinetLauncher
@@ -23,12 +21,6 @@ namespace HGDCabinetLauncher
             this.AttachDevTools();
 #endif
             finder = new();
-            Console.WriteLine(this.panel.Name);
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
         }
 
         private void GameList_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
@@ -36,12 +28,13 @@ namespace HGDCabinetLauncher
             //probably don't need this method at all, will remove later
             ListBox item = (ListBox) sender;
             Console.WriteLine($"selection: {item.SelectedIndex}");
-            if (!this.IsLoaded) return;
+            
             this.name.Text = finder.gameList[item.SelectedIndex].name;
-            this.desc.Text = finder.gameList[item.SelectedIndex].desc;
-            this.ver.Text = finder.gameList[item.SelectedIndex].version;
-            this.link.Text = finder.gameList[item.SelectedIndex].link;
-            this.authors.Text = finder.gameList[item.SelectedIndex].authors;
+            this.desc.Text = "Description:\n" + finder.gameList[item.SelectedIndex].desc;
+            this.ver.Text = "Version:\n" + finder.gameList[item.SelectedIndex].version;
+            this.authors.Text = "Author(s):\n" + finder.gameList[item.SelectedIndex].authors;
+            //set data for link opening stuff via click event
+            this.link.Tag = finder.gameList[item.SelectedIndex].link;
         }
 
         //build new avalonia list for listbox once it's properly loaded in
@@ -71,31 +64,22 @@ namespace HGDCabinetLauncher
             finder.playGame(item.SelectedIndex);
         }
 
-        private void Control_OnLoaded(object? sender, RoutedEventArgs e)
+        private void Link_OnClick(object? sender, RoutedEventArgs e)
         {
-            StackPanel panel = (StackPanel) sender;
-            AvaloniaList<IControl>.Enumerator boxes = panel.Children.GetEnumerator();
-            foreach (TextBox box in panel.Children)
+            //open link to site, borrowed from stack overflow since C# lacks a standard way of opening links
+            //(wish this was abstracted in a dotnet core class like with directories)
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                box.Text = finder.gameList[0].name;
+                Process.Start(new ProcessStartInfo((string) this.link.Tag) { UseShellExecute = true });
             }
-
-            Type t = typeof(GameMeta);
-            PropertyInfo[] props = typeof(GameMeta).GetProperties(BindingFlags.Public|BindingFlags.Instance);
-            Console.WriteLine(props.Length);
-            foreach (PropertyInfo p in typeof(GameMeta).GetProperties())
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                Console.WriteLine(p.Name);
+                Process.Start("xdg-open", (string) this.link.Tag);
             }
-            for (int i = 0; i < props.Length; i++)
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                Console.WriteLine(props[i].GetValue(finder.gameList[i]) );
+                Process.Start("open", (string) this.link.Tag);
             }
-            // this.name.Text = finder.gameList[0].name;
-            // this.desc.Text = finder.gameList[0].desc;
-            // this.ver.Text = finder.gameList[0].version;
-            // this.link.Text = finder.gameList[0].link;
-            // this.authors.Text = finder.gameList[0].authors;
         }
     }
 }

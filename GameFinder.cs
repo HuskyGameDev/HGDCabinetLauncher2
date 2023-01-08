@@ -9,28 +9,35 @@ namespace HGDCabinetLauncher;
 public class GameFinder
 {
     public GameMeta[] gameList { get; }
-    public bool isRunning;
+    private bool isRunning; //used to ensure only one game is running at any given time
 
     public GameFinder()
     {
-        Console.WriteLine("Indexing games!");
-        string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-        string[] fileList = Directory.GetFiles((desktop + "/Games"), "meta.json", SearchOption.AllDirectories);
-        gameList = new GameMeta[fileList.Length];
+        Console.WriteLine("Indexing game metafiles!");
         
-        for(int i = 0; i < fileList.Length; i++)
+        /*
+         desktop is used instead of documents because on
+         linux C# regards ~/ as the documents folder instead of ~/Documents, maybe some distros don't have ~/Documents
+         but this just seems like lazy code to me :/
+        */
+        string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        string[] fileList = Directory.GetFiles
+        (
+            (desktop + "/Games"),
+            "meta.json", SearchOption.AllDirectories
+        ); //look for any meta.json files within a Games folder on the Desktop
+
+        gameList = new GameMeta[fileList.Length];
+
+        for (int i = 0; i < fileList.Length; i++)
         {
             string metaStr = File.ReadAllText(fileList[i]);
             gameList[i] = JsonConvert.DeserializeObject<GameMeta>(metaStr);
             gameList[i].execLoc = fileList[i].Substring(0, fileList[i].Length - 9);
-            Console.WriteLine($"found: {gameList[i].name}");
+            Console.WriteLine($"found data for: {gameList[i].name}");
         }
+
         Console.WriteLine($"Index complete! Found {gameList.Length} games");
-    }
-    
-    public GameFinder(string directory)
-    {
-        //may or may not use this, more likely to make a settings.json or launch arg to control directory scans
     }
 
     //false if there was an error running the game
@@ -47,23 +54,19 @@ public class GameFinder
             gameProcess.StartInfo.WorkingDirectory = gameList[index].execLoc;
             gameProcess.StartInfo.FileName = gameList[index].execLoc + gameList[index].exec;
             gameProcess.StartInfo.CreateNoWindow = false;
-            gameProcess.EnableRaisingEvents = true;
-            gameProcess.Exited += GameProcessOnExited;
-            gameProcess.StartInfo.RedirectStandardOutput = true;
-            gameProcess.Start();
+            gameProcess.Start(); //I hope you have your file associations correct!
+
+            //using async and await calls instead of the exit event since the
+            //event fails to fire if this method finishes, defeating the purpose of using an event at all
             await gameProcess.WaitForExitAsync();
+            Console.WriteLine("process exited!");
         }
         catch (Exception e)
         {
+            Console.WriteLine("process crashed!");
             Console.WriteLine(e.Message);
-            isRunning = false;
-            return;
         }
-    }
 
-    private void GameProcessOnExited(object? sender, EventArgs e)
-    {
-        Console.WriteLine("test");
         isRunning = false;
     }
 }

@@ -52,14 +52,16 @@
     
     <StackPanel x:Name="panel">
         <TextBox Text="Husky Arcade Launcher!" Height="50" FontWeight="Bold"></TextBox>
-        <Grid x:Name="grid" RowDefinitions="620" ColumnDefinitions="*, 250" ShowGridLines="True">
-            <StackPanel x:Name="infoPanel" Orientation="Vertical" Loaded="Control_OnLoaded">
-                <TextBox x:Name="name" x:FieldModifier="public" Background="#F2F2F2" CornerRadius="15" Width="500" Text="name"/>
-                <TextBox x:Name="desc" Text="description" />
-                <TextBox x:Name="ver" Text="version" />
-                <TextBox x:Name="link" Text="link" />
-                <TextBox x:Name="authors" Text="authors"/>
-            </StackPanel>
+        <Grid x:Name="grid" RowDefinitions="620" ColumnDefinitions="*, 250" ShowGridLines="False">
+            <Border Background="#F2F2F2" CornerRadius="15" Height="500" Margin="15">
+                <StackPanel x:Name="infoPanel" Orientation="Vertical" Background="#F2F2F2" Margin="15">
+                    <TextBox x:Name="name" x:FieldModifier="public" Text="name"/>
+                    <TextBox x:Name="desc" Text="description" />
+                    <TextBox x:Name="ver" Text="version" />
+                    <TextBox x:Name="authors" Text="authors"/>
+                    <Button x:Name="link" Content="Visit website" HorizontalAlignment="Center" Click="Link_OnClick"/>
+                </StackPanel>
+            </Border>
             <!-- <Svg Path="logoHGD.svg" MaxHeight="400" HorizontalAlignment="Center" VerticalAlignment="Center"/> -->
             <ListBox Name="gameList" Grid.Column="1"
                      VerticalAlignment="Center" SelectionMode="Single" Margin="5" 
