@@ -50,10 +50,17 @@
         </Style>
     </Window.Styles>
     
-    <StackPanel>
+    <StackPanel x:Name="panel">
         <TextBox Text="Husky Arcade Launcher!" Height="50" FontWeight="Bold"></TextBox>
-        <Grid RowDefinitions="620" ColumnDefinitions="*, 250" ShowGridLines="True">
-            <Svg Path="logoHGD.svg" MaxHeight="400" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Grid x:Name="grid" RowDefinitions="620" ColumnDefinitions="*, 250" ShowGridLines="True">
+            <StackPanel x:Name="infoPanel" Orientation="Vertical" Loaded="Control_OnLoaded">
+                <TextBox x:Name="name" x:FieldModifier="public" Background="#F2F2F2" CornerRadius="15" Width="500" Text="name"/>
+                <TextBox x:Name="desc" Text="description" />
+                <TextBox x:Name="ver" Text="version" />
+                <TextBox x:Name="link" Text="link" />
+                <TextBox x:Name="authors" Text="authors"/>
+            </StackPanel>
+            <!-- <Svg Path="logoHGD.svg" MaxHeight="400" HorizontalAlignment="Center" VerticalAlignment="Center"/> -->
             <ListBox Name="gameList" Grid.Column="1"
                      VerticalAlignment="Center" SelectionMode="Single" Margin="5" 
                      CornerRadius="15" SelectedIndex="0" MinHeight="500"

@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace HGDCabinetLauncher;
@@ -8,6 +9,7 @@ namespace HGDCabinetLauncher;
 public class GameFinder
 {
     public GameMeta[] gameList { get; }
+    public bool isRunning;
 
     public GameFinder()
     {
@@ -32,10 +34,11 @@ public class GameFinder
     }
 
     //false if there was an error running the game
-    public bool playGame(int index)
+    public async void playGame(int index)
     {
+        if (isRunning) return;
         Console.WriteLine($"Starting game index {index} name \"{gameList[index].name}\"");
-        
+        isRunning = true;
         try
         {
             //for linux make sure binaries have the execution bit set
@@ -44,14 +47,23 @@ public class GameFinder
             gameProcess.StartInfo.WorkingDirectory = gameList[index].execLoc;
             gameProcess.StartInfo.FileName = gameList[index].execLoc + gameList[index].exec;
             gameProcess.StartInfo.CreateNoWindow = false;
+            gameProcess.EnableRaisingEvents = true;
+            gameProcess.Exited += GameProcessOnExited;
+            gameProcess.StartInfo.RedirectStandardOutput = true;
             gameProcess.Start();
+            await gameProcess.WaitForExitAsync();
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
-            return false;
+            isRunning = false;
+            return;
         }
-        
-        return true;
+    }
+
+    private void GameProcessOnExited(object? sender, EventArgs e)
+    {
+        Console.WriteLine("test");
+        isRunning = false;
     }
 }

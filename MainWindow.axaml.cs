@@ -1,12 +1,12 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using System.Linq;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using System.Linq;
+using System.Reflection;
+using System.Threading;
 using Avalonia.Input;
 
 namespace HGDCabinetLauncher
@@ -22,19 +22,26 @@ namespace HGDCabinetLauncher
 #if DEBUG
             this.AttachDevTools();
 #endif
+            finder = new();
+            Console.WriteLine(this.panel.Name);
         }
 
         private void InitializeComponent()
         {
-            finder = new();
             AvaloniaXamlLoader.Load(this);
         }
 
         private void GameList_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
             //probably don't need this method at all, will remove later
-            //ListBox item = (ListBox) sender;
-            //Console.WriteLine(item.SelectedIndex);
+            ListBox item = (ListBox) sender;
+            Console.WriteLine($"selection: {item.SelectedIndex}");
+            if (!this.IsLoaded) return;
+            this.name.Text = finder.gameList[item.SelectedIndex].name;
+            this.desc.Text = finder.gameList[item.SelectedIndex].desc;
+            this.ver.Text = finder.gameList[item.SelectedIndex].version;
+            this.link.Text = finder.gameList[item.SelectedIndex].link;
+            this.authors.Text = finder.gameList[item.SelectedIndex].authors;
         }
 
         //build new avalonia list for listbox once it's properly loaded in
@@ -62,6 +69,33 @@ namespace HGDCabinetLauncher
         {
             ListBox item = (ListBox) sender;
             finder.playGame(item.SelectedIndex);
+        }
+
+        private void Control_OnLoaded(object? sender, RoutedEventArgs e)
+        {
+            StackPanel panel = (StackPanel) sender;
+            AvaloniaList<IControl>.Enumerator boxes = panel.Children.GetEnumerator();
+            foreach (TextBox box in panel.Children)
+            {
+                box.Text = finder.gameList[0].name;
+            }
+
+            Type t = typeof(GameMeta);
+            PropertyInfo[] props = typeof(GameMeta).GetProperties(BindingFlags.Public|BindingFlags.Instance);
+            Console.WriteLine(props.Length);
+            foreach (PropertyInfo p in typeof(GameMeta).GetProperties())
+            {
+                Console.WriteLine(p.Name);
+            }
+            for (int i = 0; i < props.Length; i++)
+            {
+                Console.WriteLine(props[i].GetValue(finder.gameList[i]) );
+            }
+            // this.name.Text = finder.gameList[0].name;
+            // this.desc.Text = finder.gameList[0].desc;
+            // this.ver.Text = finder.gameList[0].version;
+            // this.link.Text = finder.gameList[0].link;
+            // this.authors.Text = finder.gameList[0].authors;
         }
     }
 }
