@@ -6,6 +6,10 @@
         Width="1280" Height="720"
         Title="HGDCabinetLauncher">
     
+    <Window.Background>
+        <ImageBrush Source="backgroundRast.png"/>
+    </Window.Background>
+    
     <Window.Styles>
         <Style Selector="TextBox">
             <Setter Property="TextAlignment" Value="Center" />
@@ -13,6 +17,7 @@
             <Setter Property="IsReadOnly" Value="True" />
             <Setter Property="Focusable" Value="False" />
             <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Background" Value="#00F2F2F2" />
         </Style>
         <Style Selector="Button">
             <Setter Property="VerticalAlignment" Value="Center" />
@@ -20,11 +25,8 @@
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="CornerRadius" Value="15" />
             <Setter Property="Margin" Value="5" />
-        </Style>
-        <Style Selector="ListBox">
-            <!--
-            <Setter Property="" Value="" />
-        -->
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Background" Value="#F2F2F2" />
         </Style>
         <Style Selector="ListBoxItem">
             <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -53,18 +55,20 @@
     <StackPanel x:Name="panel">
         <TextBox Text="Husky Arcade Launcher!" Height="50" FontWeight="Bold"></TextBox>
         <Grid x:Name="grid" RowDefinitions="620" ColumnDefinitions="*, 250" ShowGridLines="False">
-            <Border Background="#F2F2F2" CornerRadius="15" Height="500" Margin="15">
-                <StackPanel x:Name="infoPanel" Orientation="Vertical" Background="#F2F2F2" Margin="15">
-                    <TextBox x:Name="name" x:FieldModifier="public" Text="name"/>
-                    <TextBox x:Name="desc" Text="description" />
-                    <TextBox x:Name="ver" Text="version" />
-                    <TextBox x:Name="authors" Text="authors"/>
-                    <Button x:Name="link" Content="Visit website" HorizontalAlignment="Center" Click="Link_OnClick"/>
+            <Border Background="#80F2F2F2" CornerRadius="15" Height="500" Margin="15">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="15" Spacing="75">
+                    <StackPanel x:Name="infoPanel" Orientation="Vertical" Margin="15" HorizontalAlignment="Left">
+                        <TextBox x:Name="name" Text="name" FontWeight="Bold"/>
+                        <TextBox x:Name="desc" Text="description" />
+                        <TextBox x:Name="ver" Text="version" />
+                        <TextBox x:Name="authors" Text="authors"/>
+                        <Button x:Name="link" Content="Visit website" Margin="5" HorizontalAlignment="Center" HotKey="G" Click="Link_OnClick"/>
+                    </StackPanel>
+                    <Image x:Name="gameImg" Source="logoHGDRast.png" MaxWidth="350" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </StackPanel>
             </Border>
-            <!-- <Svg Path="logoHGD.svg" MaxHeight="400" HorizontalAlignment="Center" VerticalAlignment="Center"/> -->
-            <ListBox Name="gameList" Grid.Column="1"
-                     VerticalAlignment="Center" SelectionMode="Single" Margin="5" 
+            <ListBox Background="#80F2F2F2" Name="gameList" Grid.Column="1"
+                     VerticalAlignment="Center" SelectionMode="Single" Margin="5"
                      CornerRadius="15" SelectedIndex="0" MinHeight="500"
                      Loaded="GameList_OnLoaded"
                      SelectionChanged="GameList_OnSelectionChanged"
@@ -72,6 +76,6 @@
             </ListBox>
         </Grid>
         <Button HorizontalAlignment="Center" Content="Play" Height="40" Width="250" Margin="5"
-                Click="ButtonPlay"/>
+                Click="ButtonPlay" HotKey="F"/>
     </StackPanel>
 </Window>

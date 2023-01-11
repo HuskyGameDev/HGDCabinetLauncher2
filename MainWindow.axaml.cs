@@ -6,6 +6,8 @@ using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Input;
+using Avalonia.Media;
+using Avalonia.Media.Imaging;
 
 namespace HGDCabinetLauncher
 {
@@ -35,6 +37,9 @@ namespace HGDCabinetLauncher
             this.authors.Text = "Author(s):\n" + finder.gameList[item.SelectedIndex].authors;
             //set data for link opening stuff via click event
             this.link.Tag = finder.gameList[item.SelectedIndex].link;
+            Console.WriteLine(finder.gameList[item.SelectedIndex].execLoc + finder.gameList[item.SelectedIndex].imgDir);
+            IImage img = new Bitmap(finder.gameList[item.SelectedIndex].execLoc + finder.gameList[item.SelectedIndex].imgDir);
+            this.gameImg.Source = (img);
         }
 
         //build new avalonia list for listbox once it's properly loaded in

@@ -37,6 +37,14 @@
       <AvaloniaResource Include="logoHGD.svg">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </AvaloniaResource>
+      <None Remove="logoHGDRast.png" />
+      <AvaloniaResource Include="logoHGDRast.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </AvaloniaResource>
+      <None Remove="backgroundRast.png" />
+      <AvaloniaResource Include="backgroundRast.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </AvaloniaResource>
     </ItemGroup>
     <ItemGroup>
       <AvaloniaXaml Remove="Games\**" />

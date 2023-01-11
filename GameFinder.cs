@@ -18,7 +18,7 @@ public class GameFinder
         /*
          desktop is used instead of documents because on
          linux C# regards ~/ as the documents folder instead of ~/Documents, maybe some distros don't have ~/Documents
-         but this just seems like lazy code to me :/
+         but this just seems like lazy/poorly implemented code to me :/
         */
         string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         string[] fileList = Directory.GetFiles
