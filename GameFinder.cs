@@ -1,15 +1,14 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace HGDCabinetLauncher;
 
 public class GameFinder
 {
-    public GameMeta[] gameList { get; }
-    private bool isRunning; //used to ensure only one game is running at any given time
+    public GameMeta[] GameList { get; } //list of game metadata like file paths and information to display
+    private bool _isRunning; //used to ensure only one game is running at any given time
 
     public GameFinder()
     {
@@ -27,32 +26,33 @@ public class GameFinder
             "meta.json", SearchOption.AllDirectories
         ); //look for any meta.json files within a Games folder on the Desktop
 
-        gameList = new GameMeta[fileList.Length];
+        GameList = new GameMeta[fileList.Length];
 
         for (int i = 0; i < fileList.Length; i++)
         {
             string metaStr = File.ReadAllText(fileList[i]);
-            gameList[i] = JsonConvert.DeserializeObject<GameMeta>(metaStr);
-            gameList[i].execLoc = fileList[i].Substring(0, fileList[i].Length - 9);
-            Console.WriteLine($"found data for: {gameList[i].name}");
+            //create empty game meta if deserialization goes sideways
+            GameList[i] = JsonConvert.DeserializeObject<GameMeta>(metaStr) ?? new GameMeta();
+            GameList[i].ExecLoc = fileList[i][..(fileList[i].Length - 9)];
+            Console.WriteLine($"found data for: {GameList[i].Name}");
         }
 
-        Console.WriteLine($"Index complete! Found {gameList.Length} games");
+        Console.WriteLine($"Index complete! Found {GameList.Length} games");
     }
 
     //false if there was an error running the game
     public async void playGame(int index)
     {
-        if (isRunning) return;
-        Console.WriteLine($"Starting game index {index} name \"{gameList[index].name}\"");
-        isRunning = true;
+        if (_isRunning) return;
+        Console.WriteLine($"Starting game index {index} name \"{GameList[index].Name}\"");
+        _isRunning = true;
         try
         {
             //for linux make sure binaries have the execution bit set
             using Process gameProcess = new();
             gameProcess.StartInfo.UseShellExecute = false;
-            gameProcess.StartInfo.WorkingDirectory = gameList[index].execLoc;
-            gameProcess.StartInfo.FileName = gameList[index].execLoc + gameList[index].exec;
+            gameProcess.StartInfo.WorkingDirectory = GameList[index].ExecLoc;
+            gameProcess.StartInfo.FileName = GameList[index].ExecLoc + GameList[index].Exec;
             gameProcess.StartInfo.CreateNoWindow = false;
             gameProcess.Start(); //I hope you have your file associations correct!
 
@@ -67,6 +67,6 @@ public class GameFinder
             Console.WriteLine(e.Message);
         }
 
-        isRunning = false;
+        _isRunning = false;
     }
 }

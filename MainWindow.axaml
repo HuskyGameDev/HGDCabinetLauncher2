@@ -4,16 +4,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         x:Class="HGDCabinetLauncher.MainWindow"
         Width="1280" Height="720"
-        Title="HGDCabinetLauncher">
+        WindowState="Normal"
+        Title="HGDCabinetLauncher" KeyDown="InputElement_OnKeyDown" Focusable="True">
     
     <Window.Background>
-        <ImageBrush Source="backgroundRast.png"/>
+        <ImageBrush Source="resm:HGDCabinetLauncher.backgroundRast.png" />
     </Window.Background>
-    
+
     <Window.Styles>
         <Style Selector="TextBox">
             <Setter Property="TextAlignment" Value="Center" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="IsReadOnly" Value="True" />
             <Setter Property="Focusable" Value="False" />
             <Setter Property="BorderThickness" Value="0" />
@@ -39,43 +41,60 @@
                 <Animation Duration="0:0:.5"
                            Easing="BounceEaseOut">
                     <KeyFrame Cue="0%">
-                        <Setter Property="Width" Value="0"/>
+                        <Setter Property="Width" Value="150" />
                     </KeyFrame>
                     <KeyFrame Cue="100%">
-                        <Setter Property="Width" Value="230"/>
+                        <Setter Property="Width" Value="200" />
                     </KeyFrame>
                 </Animation>
             </Style.Animations>
         </Style>
         <Style Selector="AdornerLayer">
-            <Setter Property="IsVisible" Value="False"/>
+            <Setter Property="IsVisible" Value="False" />
         </Style>
     </Window.Styles>
-    
-    <StackPanel x:Name="panel">
-        <TextBox Text="Husky Arcade Launcher!" Height="50" FontWeight="Bold"></TextBox>
-        <Grid x:Name="grid" RowDefinitions="620" ColumnDefinitions="*, 250" ShowGridLines="False">
-            <Border Background="#80F2F2F2" CornerRadius="15" Height="500" Margin="15">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="15" Spacing="75">
-                    <StackPanel x:Name="infoPanel" Orientation="Vertical" Margin="15" HorizontalAlignment="Left">
-                        <TextBox x:Name="name" Text="name" FontWeight="Bold"/>
+
+
+    <StackPanel x:Name="panel" Focusable="False">
+        <TextBox Text="Welcome to the Husky Game Development arcade cabinet" Height="50" FontWeight="Bold"></TextBox>
+        <Grid x:Name="grid" RowDefinitions="*" ColumnDefinitions="*, 250" ShowGridLines="False">
+            <Border Background="#80F2F2F2" CornerRadius="15" MinHeight="500" BoxShadow="1 1 30 2 Black" Margin="15"
+                    Focusable="False" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center"
+                            Margin="15" Spacing="75">
+                    <StackPanel x:Name="infoPanel" Orientation="Vertical" Margin="15" HorizontalAlignment="Left"
+                                VerticalAlignment="Center">
+                        <TextBox x:Name="name" Text="name" FontWeight="Bold" />
                         <TextBox x:Name="desc" Text="description" />
                         <TextBox x:Name="ver" Text="version" />
-                        <TextBox x:Name="authors" Text="authors"/>
-                        <Button x:Name="link" Content="Visit website" Margin="5" HorizontalAlignment="Center" HotKey="G" Click="Link_OnClick"/>
+                        <TextBox x:Name="authors" Text="authors" />
+                        <Button x:Name="link" Content="G to visit website" Background="#00F2F2F2" Margin="5"
+                                HorizontalAlignment="Center" HotKey="G" Click="Link_OnClick" Focusable="False">
+                            <Button.Flyout>
+                                <Flyout>
+                                    <Image x:Name="qrImage" />
+                                </Flyout>
+                            </Button.Flyout>
+                        </Button>
                     </StackPanel>
-                    <Image x:Name="gameImg" Source="logoHGDRast.png" MaxWidth="350" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Image x:Name="gameImg" Source="resm:HGDCabinetLauncher.logoHGDRast.png" Width="350"
+                           MaxHeight="350" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </StackPanel>
             </Border>
-            <ListBox Background="#80F2F2F2" Name="gameList" Grid.Column="1"
-                     VerticalAlignment="Center" SelectionMode="Single" Margin="5"
-                     CornerRadius="15" SelectedIndex="0" MinHeight="500"
-                     Loaded="GameList_OnLoaded"
-                     SelectionChanged="GameList_OnSelectionChanged"
-                     DoubleTapped="GameList_OnDoubleTapped">
-            </ListBox>
+            <Border Background="#80F2F2F2" CornerRadius="15" BoxShadow="1 1 30 2 Black" Margin="15" Grid.Column="1">
+                <ListBox Background="#00F2F2F2" Name="uiList" Focusable="False"
+                         VerticalAlignment="Center" SelectionMode="Single" Margin="5"
+                         FontWeight="Bold"
+                         SelectedIndex="0" MinHeight="445"
+                         Loaded="uiList_OnLoaded"
+                         SelectionChanged="uiList_OnSelectionChanged">
+                </ListBox>
+            </Border>
         </Grid>
-        <Button HorizontalAlignment="Center" Content="Play" Height="40" Width="250" Margin="5"
-                Click="ButtonPlay" HotKey="F"/>
+        <Border Background="#80F2F2F2" CornerRadius="15" BoxShadow="1 1 30 2 Black" Margin="15" Width="250">
+            <Button Background="#00F2F2F2" HorizontalAlignment="Center" Content="Press F to Play" Height="40"
+                    Width="250"
+                    Click="buttonPlay" HotKey="F" Focusable="False" />
+        </Border>
     </StackPanel>
 </Window>

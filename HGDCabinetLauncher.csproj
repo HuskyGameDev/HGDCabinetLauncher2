@@ -30,6 +30,7 @@
         <PackageReference Include="Avalonia.Svg" Version="11.0.0-preview4" />
         <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-preview4" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+        <PackageReference Include="QRCoder" Version="1.4.3" />
         <PackageReference Include="XamlNameReferenceGenerator" Version="1.5.1" />
     </ItemGroup>
     <ItemGroup>
@@ -38,13 +39,9 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </AvaloniaResource>
       <None Remove="logoHGDRast.png" />
-      <AvaloniaResource Include="logoHGDRast.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </AvaloniaResource>
+      <EmbeddedResource Include="logoHGDRast.png" />
       <None Remove="backgroundRast.png" />
-      <AvaloniaResource Include="backgroundRast.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </AvaloniaResource>
+      <EmbeddedResource Include="backgroundRast.png" />
     </ItemGroup>
     <ItemGroup>
       <AvaloniaXaml Remove="Games\**" />
