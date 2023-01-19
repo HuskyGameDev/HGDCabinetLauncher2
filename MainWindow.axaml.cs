@@ -29,7 +29,6 @@ namespace HGDCabinetLauncher
 #else
             this.WindowState = WindowState.FullScreen;
 #endif
-
         }
 
         //update interface when new item is selected

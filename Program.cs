@@ -19,7 +19,6 @@ namespace HGDCabinetLauncher
             logWriter.AutoFlush = true;
             logWriter.WriteLine($"Logfile for HGD arcade cabinet, generated on {DateTime.Now.ToString()}");
             Console.SetOut(logWriter);
-            Console.WriteLine("test");
             #endif
 
             buildAvaloniaApp()

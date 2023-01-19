@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         x:Class="HGDCabinetLauncher.MainWindow"
         Width="1280" Height="720"
-        WindowState="Normal"
+        WindowState="FullScreen"
         Title="HGDCabinetLauncher" KeyDown="InputElement_OnKeyDown" Focusable="True">
     
     <Window.Background>
