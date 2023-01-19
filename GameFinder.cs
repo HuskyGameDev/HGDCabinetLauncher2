@@ -20,6 +20,19 @@ public class GameFinder
          but this just seems like lazy/poorly implemented code to me :/
         */
         string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        //attempt to create games folder if it does not already exist, catch error if failure
+        try
+        {
+            Directory.CreateDirectory(desktop + "/Games");
+        }
+        catch (Exception err)
+        {
+            Console.WriteLine("Could not create or access games folder!");
+            Console.WriteLine(err.Message);
+            GameList = Array.Empty<GameMeta>();
+            return;
+        }
+
         string[] fileList = Directory.GetFiles
         (
             (desktop + "/Games"),

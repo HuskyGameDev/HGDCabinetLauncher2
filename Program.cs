@@ -14,15 +14,26 @@ namespace HGDCabinetLauncher
         // ReSharper disable once InconsistentNaming
         public static void Main(string[] args)
         {
-            #if !DEBUG
+#if !DEBUG
             using StreamWriter logWriter = new("log.txt", append:true);
             logWriter.AutoFlush = true;
             logWriter.WriteLine($"Logfile for HGD arcade cabinet, generated on {DateTime.Now.ToString()}");
             Console.SetOut(logWriter);
-            #endif
-
-            buildAvaloniaApp()
-                .StartWithClassicDesktopLifetime(args);
+#endif
+            try
+            {
+                buildAvaloniaApp()
+                    .StartWithClassicDesktopLifetime(args);
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine("Launcher crash! dumping log and exiting...");
+                Console.WriteLine(err);
+#if !DEBUG
+                logWriter.Flush();
+                logWriter.Close();
+#endif
+            }
         }
 
         // Avalonia configuration, don't remove; also used by visual designer.

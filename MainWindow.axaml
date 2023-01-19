@@ -3,8 +3,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         x:Class="HGDCabinetLauncher.MainWindow"
-        Width="1280" Height="720"
+        d:DesignWidth="1280" d:DesignHeight="720"
+        Position="0,0"
+        SystemDecorations="None"
         WindowState="FullScreen"
+        
         Title="HGDCabinetLauncher" KeyDown="InputElement_OnKeyDown" Focusable="True">
     
     <Window.Background>
