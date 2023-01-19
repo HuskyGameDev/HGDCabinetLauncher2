@@ -6,7 +6,8 @@
         d:DesignWidth="1280" d:DesignHeight="720"
         Position="0,0"
         SystemDecorations="None"
-        WindowState="FullScreen"
+        WindowState="Normal"
+        Icon="resm:HGDCabinetLauncher.logoHGDRast.png"
         
         Title="HGDCabinetLauncher" KeyDown="InputElement_OnKeyDown" Focusable="True">
     

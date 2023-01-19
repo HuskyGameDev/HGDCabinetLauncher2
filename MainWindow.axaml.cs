@@ -27,7 +27,7 @@ namespace HGDCabinetLauncher
 #if DEBUG
             this.AttachDevTools();
 #else
-            this.WindowState = WindowState.FullScreen;
+         this.WindowState = WindowState.FullScreen;   
 #endif
         }
 

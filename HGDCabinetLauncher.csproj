@@ -1,11 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <OutputType>Exe</OutputType>
         <TargetFramework>net7.0</TargetFramework>
         <Nullable>enable</Nullable>
         <!--Avalonia doesen't support TrimMode=link currently,but we are working on that https://github.com/AvaloniaUI/Avalonia/issues/6892 -->
         <TrimMode>copyused</TrimMode>
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+        <Version>1.1.0</Version>
+        <Title>Husky Game Development Arcade Cabinet Launcher 2</Title>
+        <Authors>Soup</Authors>
+        <Description>Launcher for Husky Game Devlopment's arcade cabinet</Description>
+        <PackageIcon>logoHGDRast.png</PackageIcon>
+        <RepositoryUrl>https://github.com/Soup-64/HGDCabinetLauncher2</RepositoryUrl>
+        <RepositoryType>github</RepositoryType>
+        <OutputType>WinExe</OutputType>
     </PropertyGroup>
     <ItemGroup>
         <None Remove=".gitignore" />
