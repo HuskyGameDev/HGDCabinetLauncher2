@@ -15,19 +15,23 @@ namespace HGDCabinetLauncher
     public partial class MainWindow : Window
     {
         private readonly AvaloniaList<ListBoxItem> _uiList = new(); //list for populating the ui with
+
         //instance of the GameFinder class for indexing metafiles and running detected games
-        private readonly GameFinder _finder = new(); 
+        private readonly GameFinder _finder = new();
+        
+
         //generate qr codes for website visiting
         private readonly QRCodeGenerator _gen = new();
 
 
         public MainWindow()
         {
+            this.
             InitializeComponent();
 #if DEBUG
             this.AttachDevTools();
 #else
-         this.WindowState = WindowState.FullScreen;   
+         this.WindowState = WindowState.FullScreen;
 #endif
         }
 
@@ -46,9 +50,9 @@ namespace HGDCabinetLauncher
             {
                 //construct bitmap with full path to image
                 IImage img = new Bitmap(
-                    _finder.GameList[uiList.SelectedIndex].ExecLoc + 
+                    _finder.GameList[uiList.SelectedIndex].ExecLoc +
                     _finder.GameList[uiList.SelectedIndex].ImgDir);
-                
+
                 this.gameImg.Source = (img);
             }
             catch (FileNotFoundException err)
@@ -77,7 +81,7 @@ namespace HGDCabinetLauncher
             {
                 Console.WriteLine("failed to create qr code, using fallback...");
                 Console.WriteLine(err.Message);
-                
+
                 var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
                 this.qrImage.Source = new Bitmap(assets.Open(new Uri("resm:HGDCabinetLauncher.logoHGDRast.png")));
             }
@@ -98,6 +102,8 @@ namespace HGDCabinetLauncher
         //play the game
         private void buttonPlay(object? sender, RoutedEventArgs e)
         {
+            if (_finder.getRunning()) return;
+            this.link.Flyout.Hide();
             _finder.playGame(uiList.SelectedIndex);
         }
 
@@ -126,15 +132,35 @@ namespace HGDCabinetLauncher
         //handling input for moving along the list of games in the interface
         private void InputElement_OnKeyDown(object? sender, KeyEventArgs e)
         {
+            if (_finder.getRunning()) return;
             //because I hate how this toolkit handles
             //focus since focusing the listbox is not the same as focusing the listbox items
             switch (e.Key)
             {
                 case Key.W:
-                    if (uiList.SelectedIndex > 0) this.uiList.SelectedIndex -= 1;
+                    if (uiList.SelectedIndex > 0)
+                    {
+                        link.Flyout.Hide();
+                        this.uiList.SelectedIndex -= 1;
+                    }
                     break;
                 case Key.S:
-                    if (uiList.SelectedIndex < uiList.ItemCount - 1) this.uiList.SelectedIndex += 1;
+                    if (uiList.SelectedIndex < uiList.ItemCount - 1)
+                    {
+                        link.Flyout.Hide();
+                        this.uiList.SelectedIndex += 1;
+                    }
+                    break;
+                case Key.F:
+                    this.link.Flyout.Hide();
+                    _finder.playGame(uiList.SelectedIndex);
+                    
+                    //this.WindowState = WindowState.Minimized;
+                    break;
+                case Key.G:
+                    if (link.Flyout.IsOpen) { link.Flyout.Hide(); }
+                    else { link.Flyout.ShowAt(link); }
+
                     break;
             }
         }

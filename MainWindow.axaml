@@ -73,7 +73,7 @@
                         <TextBox x:Name="ver" Text="version" />
                         <TextBox x:Name="authors" Text="authors" />
                         <Button x:Name="link" Content="G to visit website" Background="#00F2F2F2" Margin="5"
-                                HorizontalAlignment="Center" HotKey="G" Click="Link_OnClick" Focusable="False">
+                                HorizontalAlignment="Center"  Click="Link_OnClick" Focusable="False">
                             <Button.Flyout>
                                 <Flyout>
                                     <Image x:Name="qrImage" />
@@ -98,7 +98,7 @@
         <Border Background="#80F2F2F2" CornerRadius="15" BoxShadow="1 1 30 2 Black" Margin="15" Width="250">
             <Button Background="#00F2F2F2" HorizontalAlignment="Center" Content="Press F to Play" Height="40"
                     Width="250"
-                    Click="buttonPlay" HotKey="F" Focusable="False" />
+                    Click="buttonPlay"  Focusable="False" />
         </Border>
     </StackPanel>
 </Window>

@@ -1,17 +1,29 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using Avalonia.Controls;
 using Newtonsoft.Json;
+using System.Runtime.InteropServices;
 
 namespace HGDCabinetLauncher;
 
 public class GameFinder
 {
-    public GameMeta[] GameList { get; } //list of game metadata like file paths and information to display
-    private bool _isRunning; //used to ensure only one game is running at any given time
+    
+    [DllImport("user32.dll")]
+    private static extern int SetForegroundWindow(int hwnd);
 
+    public GameMeta[] GameList { get; } //list of game metadata like file paths and information to display
+    private bool isRunning; //used to ensure only one game is running at any given time
+
+    public bool getRunning()
+    {
+        return isRunning;
+    } 
+    
     public GameFinder()
     {
+        
         Console.WriteLine("Indexing game metafiles!");
         
         /*
@@ -56,9 +68,9 @@ public class GameFinder
     //false if there was an error running the game
     public async void playGame(int index)
     {
-        if (_isRunning) return;
+        if (isRunning) return;
         Console.WriteLine($"Starting game index {index} name \"{GameList[index].Name}\"");
-        _isRunning = true;
+        isRunning = true;
         try
         {
             //for linux make sure binaries have the execution bit set
@@ -66,8 +78,9 @@ public class GameFinder
             gameProcess.StartInfo.UseShellExecute = false;
             gameProcess.StartInfo.WorkingDirectory = GameList[index].ExecLoc;
             gameProcess.StartInfo.FileName = GameList[index].ExecLoc + GameList[index].Exec;
-            gameProcess.StartInfo.CreateNoWindow = false;
+            gameProcess.StartInfo.CreateNoWindow = true;
             gameProcess.Start(); //I hope you have your file associations correct!
+            SetForegroundWindow((int) gameProcess.MainWindowHandle);
 
             //using async and await calls instead of the exit event since the
             //event fails to fire if this method finishes, defeating the purpose of using an event at all
@@ -80,6 +93,6 @@ public class GameFinder
             Console.WriteLine(e.Message);
         }
 
-        _isRunning = false;
+        isRunning = false;
     }
 }
