@@ -1,14 +1,8 @@
-using System;
-using System.IO;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Input;
-using Avalonia.Media;
-using Avalonia.Media.Imaging;
-using Avalonia.Platform;
-using QRCoder;
 
 namespace HGDCabinetLauncher
 {
@@ -18,11 +12,6 @@ namespace HGDCabinetLauncher
 
         //instance of the GameFinder class for indexing metafiles and running detected games
         private readonly GameFinder _finder = new();
-        
-
-        //generate qr codes for website visiting
-        private readonly QRCodeGenerator _gen = new();
-
 
         public MainWindow()
         {
@@ -43,48 +32,13 @@ namespace HGDCabinetLauncher
             ver.Text = "Version:\n" + _finder.GameList[uiList.SelectedIndex].Version;
             authors.Text = "Author(s):\n" + _finder.GameList[uiList.SelectedIndex].Authors;
             //set data for link opening stuff via click event
-            link.Tag = _finder.GameList[uiList.SelectedIndex].Link;
+            qrImage.Tag = _finder.GameList[uiList.SelectedIndex].Link;
 
             //keep tabs on functions like setting images and generating qr codes that may fail
-            try
-            {
-                //construct bitmap with full path to image
-                IImage img = new Bitmap(
-                    _finder.GameList[uiList.SelectedIndex].ExecLoc +
-                    _finder.GameList[uiList.SelectedIndex].ImgDir);
 
-                this.gameImg.Source = (img);
-            }
-            catch (FileNotFoundException err)
-            {
-                Console.WriteLine("failed to set reference image! using fallback...");
-                Console.WriteLine(err.Message);
-                var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
-                //use embedded fallback resource
-                this.gameImg.Source = new Bitmap(assets.Open(new Uri("resm:HGDCabinetLauncher.logoHGDRast.png")));
-            }
-
-            try
-            {
-                //generate qr code for current game's link
-                QRCodeData codeData = _gen.CreateQrCode(
-                    _finder.GameList[uiList.SelectedIndex].Link,
-                    QRCodeGenerator.ECCLevel.Q);
-                BitmapByteQRCode qrImage = new(codeData);
-                byte[] graphic = qrImage.GetGraphic(10);
-
-                using MemoryStream ms = new(graphic);
-                Bitmap bmp = new(ms);
-                this.qrImage.Source = bmp;
-            }
-            catch (Exception err)
-            {
-                Console.WriteLine("failed to create qr code, using fallback...");
-                Console.WriteLine(err.Message);
-
-                var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
-                this.qrImage.Source = new Bitmap(assets.Open(new Uri("resm:HGDCabinetLauncher.logoHGDRast.png")));
-            }
+            this.gameImg.Source = _finder.GameList[uiList.SelectedIndex].gameImage;
+            this.qrImage.Source = _finder.GameList[uiList.SelectedIndex].qrImage;
+            
         }
 
         //build new avalonia list for listbox once it's loaded in
@@ -103,7 +57,6 @@ namespace HGDCabinetLauncher
         private void buttonPlay(object? sender, RoutedEventArgs e)
         {
             if (_finder.getRunning()) return;
-            this.link.Flyout.Hide();
             _finder.playGame(uiList.SelectedIndex);
         }
 
@@ -140,27 +93,19 @@ namespace HGDCabinetLauncher
                 case Key.W:
                     if (uiList.SelectedIndex > 0)
                     {
-                        link.Flyout.Hide();
                         this.uiList.SelectedIndex -= 1;
                     }
                     break;
                 case Key.S:
                     if (uiList.SelectedIndex < uiList.ItemCount - 1)
                     {
-                        link.Flyout.Hide();
                         this.uiList.SelectedIndex += 1;
                     }
                     break;
                 case Key.F:
-                    this.link.Flyout.Hide();
                     _finder.playGame(uiList.SelectedIndex);
                     
                     //this.WindowState = WindowState.Minimized;
-                    break;
-                case Key.G:
-                    if (link.Flyout.IsOpen) { link.Flyout.Hide(); }
-                    else { link.Flyout.ShowAt(link); }
-
                     break;
             }
         }

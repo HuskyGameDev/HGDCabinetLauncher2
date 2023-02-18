@@ -1,3 +1,6 @@
+using Avalonia.Media;
+using Avalonia.Media.Imaging;
+
 namespace HGDCabinetLauncher;
 
 public class GameMeta
@@ -12,4 +15,7 @@ public class GameMeta
     public string? ExecLoc;  //folder exec resides in, determined at runtime
     public string? IconDir;
     public string? ImgDir;
+
+    public Bitmap qrImage;
+    public IImage gameImage;
 }

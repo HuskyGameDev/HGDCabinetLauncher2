@@ -4,6 +4,11 @@ using System.IO;
 using Avalonia.Controls;
 using Newtonsoft.Json;
 using System.Runtime.InteropServices;
+using Avalonia;
+using Avalonia.Media;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
+using QRCoder;
 
 namespace HGDCabinetLauncher;
 
@@ -53,12 +58,61 @@ public class GameFinder
 
         GameList = new GameMeta[fileList.Length];
 
+        QRCodeGenerator codeGen = new();
+
         for (int i = 0; i < fileList.Length; i++)
         {
             string metaStr = File.ReadAllText(fileList[i]);
             //create empty game meta if deserialization goes sideways
             GameList[i] = JsonConvert.DeserializeObject<GameMeta>(metaStr) ?? new GameMeta();
             GameList[i].ExecLoc = fileList[i][..(fileList[i].Length - 9)];
+            
+            //load in sample image for game and store it
+            try
+            {
+                //construct bitmap with full path to image
+                IImage img = new Bitmap(
+                    GameList[i].ExecLoc +
+                    GameList[i].ImgDir);
+
+                GameList[i].gameImage = (img);
+            }
+            catch (FileNotFoundException err)
+            {
+                Console.WriteLine("failed to set reference image! using fallback...");
+                Console.WriteLine(err.Message);
+                var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
+                //use embedded fallback resource
+                GameList[i].gameImage = new Bitmap(assets.Open(new Uri("resm:HGDCabinetLauncher.logoHGDRast.png")));
+            }
+            //generate qr code based on metadata link and store it
+            try
+            {
+                //generate qr code for current game's link
+                QRCodeData codeData = codeGen.CreateQrCode(
+                    GameList[i].Link,
+                    QRCodeGenerator.ECCLevel.Q);
+                BitmapByteQRCode qrImage = new(codeData);
+                byte[] graphic = qrImage.GetGraphic(10);
+
+                using MemoryStream ms = new(graphic);
+                GameList[i].qrImage = new Bitmap(ms);
+                //dispose ALL the objects!
+                ms.Dispose();
+                qrImage.Dispose();
+                codeData.Dispose();
+                graphic = null;
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine("failed to create qr code, using fallback...");
+                Console.WriteLine(err.Message);
+
+                var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
+                GameList[i].qrImage = new Bitmap(assets.Open(new Uri("resm:HGDCabinetLauncher.logoHGDRast.png")));
+            }
+            codeGen.Dispose();
+            
             Console.WriteLine($"found data for: {GameList[i].Name}");
         }
 

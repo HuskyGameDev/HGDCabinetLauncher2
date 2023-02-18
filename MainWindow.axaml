@@ -12,7 +12,7 @@
         Title="HGDCabinetLauncher" KeyDown="InputElement_OnKeyDown" Focusable="True">
     
     <Window.Background>
-        <ImageBrush Source="resm:HGDCabinetLauncher.backgroundRast.png" />
+        <ImageBrush Source="resm:HGDCabinetLauncher.backgroundRast.png" Stretch="UniformToFill" />
     </Window.Background>
 
     <Window.Styles>
@@ -24,6 +24,7 @@
             <Setter Property="Focusable" Value="False" />
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Background" Value="#00F2F2F2" />
+            <Setter Property="Foreground" Value="#2A2E32" />
         </Style>
         <Style Selector="Button">
             <Setter Property="VerticalAlignment" Value="Center" />
@@ -33,11 +34,14 @@
             <Setter Property="Margin" Value="5" />
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="Background" Value="#F2F2F2" />
+            <Setter Property="Foreground" Value="#2A2E32" />
         </Style>
         <Style Selector="ListBoxItem">
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="CornerRadius" Value="15" />
             <Setter Property="Margin" Value="5" />
+            <Setter Property="Foreground" Value="#2A2E32" />
+            <Setter Property="FontWeight" Value="Bold" />
         </Style>
         <Style Selector="ListBoxItem:selected">
             <Setter Property="Background" Value="#E15985" />
@@ -65,29 +69,28 @@
             <Border Background="#80F2F2F2" CornerRadius="15" MinHeight="500" BoxShadow="1 1 30 2 Black" Margin="15"
                     Focusable="False" VerticalAlignment="Center">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center"
-                            Margin="15" Spacing="75">
-                    <StackPanel x:Name="infoPanel" Orientation="Vertical" Margin="15" HorizontalAlignment="Left"
+                            Margin="15" Spacing="75" Height="700">
+                    <Panel x:Name="infoPanel" Margin="15" HorizontalAlignment="Left" Width="500" Height="650"
                                 VerticalAlignment="Center">
-                        <TextBox x:Name="name" Text="name" FontWeight="Bold" />
-                        <TextBox x:Name="desc" Text="description" />
-                        <TextBox x:Name="ver" Text="version" />
-                        <TextBox x:Name="authors" Text="authors" />
-                        <Button x:Name="link" Content="G to visit website" Background="#00F2F2F2" Margin="5"
-                                HorizontalAlignment="Center"  Click="Link_OnClick" Focusable="False">
-                            <Button.Flyout>
-                                <Flyout>
-                                    <Image x:Name="qrImage" />
-                                </Flyout>
-                            </Button.Flyout>
-                        </Button>
-                    </StackPanel>
-                    <Image x:Name="gameImg" Source="resm:HGDCabinetLauncher.logoHGDRast.png" Width="350"
-                           MaxHeight="350" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+                            <TextBox x:Name="name" Text="name" FontWeight="Bold" />
+                            <TextBox x:Name="desc" Text="description" />
+                            <TextBox x:Name="ver" Text="version" />
+                            <TextBox x:Name="authors" Text="authors" />
+                        </StackPanel>
+                        <Separator Background="#2A2E32" Margin="75"  Height="2" VerticalAlignment="Center"/>
+                        <Border Background="#2A2E32" BorderThickness="2" Width="200" Height="200" VerticalAlignment="Bottom">
+                            <Image x:Name="qrImage"/>
+                        </Border>
+                    </Panel>
+                    <Border Background="#2A2E32" BorderThickness="2" Width="400" Height="400" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <Image x:Name="gameImg" Source="resm:HGDCabinetLauncher.logoHGDRast.png" Stretch="UniformToFill"/>
+                    </Border>
                 </StackPanel>
             </Border>
             <Border Background="#80F2F2F2" CornerRadius="15" BoxShadow="1 1 30 2 Black" Margin="15" Grid.Column="1">
                 <ListBox Background="#00F2F2F2" Name="uiList" Focusable="False"
-                         VerticalAlignment="Center" SelectionMode="Single" Margin="5"
+                         VerticalAlignment="Top" SelectionMode="Single" Margin="5"
                          FontWeight="Bold"
                          SelectedIndex="0" MinHeight="445"
                          Loaded="uiList_OnLoaded"
