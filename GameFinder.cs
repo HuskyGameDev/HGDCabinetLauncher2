@@ -125,10 +125,11 @@ public class GameFinder
         if (isRunning) return;
         Console.WriteLine($"Starting game index {index} name \"{GameList[index].Name}\"");
         isRunning = true;
+        using Process gameProcess = new();
         try
         {
             //for linux make sure binaries have the execution bit set
-            using Process gameProcess = new();
+            
             gameProcess.StartInfo.UseShellExecute = false;
             gameProcess.StartInfo.WorkingDirectory = GameList[index].ExecLoc;
             gameProcess.StartInfo.FileName = GameList[index].ExecLoc + GameList[index].Exec;
@@ -138,14 +139,15 @@ public class GameFinder
 
             //using async and await calls instead of the exit event since the
             //event fails to fire if this method finishes, defeating the purpose of using an event at all
-            await gameProcess.WaitForExitAsync();
-            Console.WriteLine("process exited!");
         }
         catch (Exception e)
         {
-            Console.WriteLine("process crashed!");
+            Console.WriteLine("process had an error!");
             Console.WriteLine(e.Message);
         }
+        
+        await gameProcess.WaitForExitAsync();
+        Console.WriteLine("process exited!");
 
         isRunning = false;
     }

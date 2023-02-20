@@ -1,3 +1,5 @@
+using System;
+using System.Threading;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
@@ -60,28 +62,6 @@ namespace HGDCabinetLauncher
             _finder.playGame(uiList.SelectedIndex);
         }
 
-        //unused, for opening a browser upon button click
-        private void Link_OnClick(object? sender, RoutedEventArgs e)
-        {
-            //open link to site, borrowed from stack overflow since C# lacks a standard way of opening links
-            //(wish this was abstracted in a dotnet core class like with directories)
-            //this is now disabled since it would be dumb to open a browser on an arcade cabinet
-            //may bring it back if I introduce builds meant to work on systems besides the cabinet
-
-            //  if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            // {
-            //     Process.Start(new ProcessStartInfo((string) this.link.Tag) { UseShellExecute = true });
-            // }
-            // else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            // {
-            //     Process.Start("xdg-open", (string) this.link.Tag);
-            // }
-            // else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            // {
-            //     Process.Start("open", (string) this.link.Tag);
-            // }
-        }
-
         //handling input for moving along the list of games in the interface
         private void InputElement_OnKeyDown(object? sender, KeyEventArgs e)
         {
@@ -102,10 +82,14 @@ namespace HGDCabinetLauncher
                         this.uiList.SelectedIndex += 1;
                     }
                     break;
-                case Key.F:
-                    _finder.playGame(uiList.SelectedIndex);
-                    
-                    //this.WindowState = WindowState.Minimized;
+                default:
+                    //only default to any key if no modifiers are pressed
+                    if (e.Key is >= Key.A and <= Key.Z)
+                    {
+                        _finder.playGame(uiList.SelectedIndex);
+                        Console.WriteLine(OwnedWindows.ToString());
+                        //this.WindowState = WindowState.Minimized;
+                    }
                     break;
             }
         }

@@ -99,7 +99,7 @@
             </Border>
         </Grid>
         <Border Background="#80F2F2F2" CornerRadius="15" BoxShadow="1 1 30 2 Black" Margin="15" Width="250">
-            <Button Background="#00F2F2F2" HorizontalAlignment="Center" Content="Press F to Play" Height="40"
+            <Button Background="#00F2F2F2" HorizontalAlignment="Center" Content="Press any button to play" Height="40"
                     Width="250"
                     Click="buttonPlay"  Focusable="False" />
         </Border>
