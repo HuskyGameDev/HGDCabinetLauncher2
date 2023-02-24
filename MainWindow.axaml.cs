@@ -1,5 +1,3 @@
-using System;
-using System.Threading;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
@@ -87,7 +85,6 @@ namespace HGDCabinetLauncher
                     if (e.Key is >= Key.A and <= Key.Z)
                     {
                         _finder.playGame(uiList.SelectedIndex);
-                        Console.WriteLine(OwnedWindows.ToString());
                         //this.WindowState = WindowState.Minimized;
                     }
                     break;
