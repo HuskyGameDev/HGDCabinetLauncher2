@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using Newtonsoft.Json;
 using System.Runtime.InteropServices;
+using System.Threading;
 using Avalonia;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
@@ -15,7 +16,10 @@ public class GameFinder
 {
     
     [DllImport("user32.dll")]
-    private static extern int SetForegroundWindow(int hwnd);
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool SetForegroundWindow(IntPtr hWnd);
+
+
 
     public GameMeta[] GameList { get; } //list of game metadata like file paths and information to display
     private bool isRunning; //used to ensure only one game is running at any given time
@@ -134,8 +138,19 @@ public class GameFinder
             gameProcess.StartInfo.FileName = GameList[index].ExecLoc + GameList[index].Exec;
             gameProcess.StartInfo.CreateNoWindow = true;
             gameProcess.Start(); //I hope you have your file associations correct!
-            SetForegroundWindow((int) gameProcess.MainWindowHandle);
 
+            for (int i = 0; i < 5; i++)
+            {
+                Thread.Sleep(3000);
+                bool changed = SetForegroundWindow((int) gameProcess.MainWindowHandle);
+                Console.WriteLine($"api returned {changed}");
+                if (changed)
+                {
+                    Console.WriteLine("focus set correctly!");
+                    break;
+                }
+                Console.WriteLine("focus not set correctly, retrying!");
+            }
             //using async and await calls instead of the exit event since the
             //event fails to fire if this method finishes, defeating the purpose of using an event at all
         }
