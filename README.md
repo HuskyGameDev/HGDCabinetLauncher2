@@ -9,4 +9,4 @@ This is a launcher for the Husky Game Development arcade cabinet at Michigan Tec
 - There are many more things that can be in the meta.json, and the sample file contains all of them.
 - Game binaries must be in the same directory as the meta.json so the working directory can be properly set.
 
-![example image ](https://cdn.discordapp.com/attachments/885998910689148939/1065386005517058068/IMG_3072.jpg)
+![example image ](https://raw.githubusercontent.com/Soup-64/HGDCabinetLauncher2/main/samples/IMG_3792.JPG)
